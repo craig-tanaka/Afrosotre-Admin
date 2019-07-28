@@ -9,6 +9,7 @@
     ]
   },
   "hosting": {
+    "site": "afrostore-admin",
     "public": "public",
     "ignore": [
       "firebase.json",
