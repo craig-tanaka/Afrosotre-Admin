@@ -10,6 +10,14 @@ body{
     padding: 1rem;
     font-size: .9rem;
 }
+button{
+    padding: 0.4rem;
+    background-color: transparent;
+    color: white;
+    border-radius: 5px;
+    border-width: 1px;
+    font-family: Graduate;
+}
 
 /* #region Nav */
 nav{
@@ -36,11 +44,14 @@ form{
     font-size: .8rem;
     /* padding: 1rem; */
 }
+.form-header{
+    text-align: center;
+}
 .form-row{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 .form-input{
     border-radius: 6px;
@@ -48,6 +59,10 @@ form{
     background-color: #ffffff91;
     border-width: 1px;
     padding: .2rem;
-    width:;
+    width: 10rem;
+}
+.btn-container{
+    display: flex;
+    justify-content: center;
 }
 /* #endregion form */
