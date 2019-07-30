@@ -1,0 +1,53 @@
+@font-face{
+    font-family: Graduate;
+    src: url(./GRADUATE.ttf) format(truetype);
+}
+body{
+    background-image: url(img/cartographer.png);
+    color: white;
+    font-family: Graduate;
+    margin: 0;
+    padding: 1rem;
+    font-size: .9rem;
+}
+
+/* #region Nav */
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#nav-brand{
+    margin: 0;
+}
+#menu-bar{
+    width: 1.5rem;
+}
+/* #endregion Nav */
+
+/* #region form */
+main{
+    height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+form{
+    font-size: .8rem;
+    /* padding: 1rem; */
+}
+.form-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.form-input{
+    border-radius: 6px;
+    font-family: Graduate;
+    background-color: #ffffff91;
+    border-width: 1px;
+    padding: .2rem;
+    width:;
+}
+/* #endregion form */
