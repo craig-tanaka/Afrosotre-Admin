@@ -11,11 +11,12 @@
   <script defer src="/__/firebase/6.3.3/firebase-app.js"></script>
   <!-- include only the Firebase features as you need -->
   <script defer src="/__/firebase/6.3.3/firebase-auth.js"></script>
-  <script defer src="/__/firebase/6.3.3/firebase-database.js"></script>
+  <script defer src="/__/firebase/6.3.3/firebase-firestore.js"></script>
   <script defer src="/__/firebase/6.3.3/firebase-messaging.js"></script>
   <script defer src="/__/firebase/6.3.3/firebase-storage.js"></script>
   <!-- initialize the SDK after all desired features are loaded -->
   <script defer src="/__/firebase/init.js"></script>
+  <script defer src="./Js/Index.js"></script>
 </head>
 
 <body>
@@ -25,34 +26,34 @@
   </nav>
 
   <main>
-    <form action="">
+    <form action="" >
       <h5 class="form-header">Please Enter Product Details</h5>
 
       <div class="form-row">
-        <label for="">Product Name :</label>
-        <input type="text" class="form-input" name="" id="">
+        <label for="product-name">Product Name :</label>
+        <input type="text" class="form-input" id="product-name">
       </div>
 
       <div class="form-row">
         <label for="">Product Category :</label>
-        <select name="" id="" class="form-input">
+        <select id="product-category" class="form-input">
           <option value="">Clothes</option>
         </select>
       </div>
 
       <div class="form-row">
         <label for="">Product Brand :</label>
-        <input type="text" class="form-input" name="" id="">
+        <input type="text" class="form-input" id="product-brand">
       </div>
 
       <div class="form-row">
         <label for="">Price :</label>
-        <input type="number" class="form-input" name="" id="">
+        <input type="number" class="form-input" id="product-price">
       </div>
 
       <div class="form-row">
         <label for="">Description :</label>
-        <textarea name="" id="" class="form-input" rows="5"></textarea>
+        <textarea id="product-description" class="form-input" rows="5"></textarea>
       </div>
 
       <div class="btn-container">
