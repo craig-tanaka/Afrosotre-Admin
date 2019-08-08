@@ -17,6 +17,7 @@
   <!-- initialize the SDK after all desired features are loaded -->
   <script defer src="/__/firebase/init.js"></script>
   <script defer src="./Js/Index.js"></script>
+
 </head>
 
 <body>
@@ -26,39 +27,69 @@
   </nav>
 
   <main>
-    <form action="" >
-      <h5 class="form-header">Please Enter Product Details</h5>
+    <form action="">
+      <h4 class="form-header">Please Enter Product Details</h4>
 
-      <div class="form-row">
-        <label for="product-image"></label>
-        <input type="file" name="" id="product-image">
-      </div>
-      <div class="form-row">
-        <label for="product-name">Product Name :</label>
-        <input type="text" class="form-input" id="product-name">
-      </div>
+      <table>
+        <tr>
+          <td>
+            <input type="file" id="real-image-input" accept="image/*">
+            <button type="button" id="browse-btn" onclick="document.querySelector('#real-image-input').click();">Select
+              Image: </button>
+          </td>
+          <td>
+            <div id="product-image-preview">No Image Selected</div>
+          </td>
+        </tr>
 
-      <div class="form-row">
-        <label for="">Product Category :</label>
-        <select id="product-category" class="form-input">
-          <option value="">Clothes</option>
-        </select>
-      </div>
+        <tr>
+          <td>
+            <label for="product-name">Product Name :</label>
+          </td>
+          <td>
+            <input type="text" class="form-input" id="product-name">
+          </td>
+        </tr>
 
-      <div class="form-row">
-        <label for="">Product Brand :</label>
-        <input type="text" class="form-input" id="product-brand">
-      </div>
+        <tr>
+          <td>
+            <label for="">Product Category :</label>
+          </td>
+          <td>
+            <select id="product-category" class="form-input">
+              <option value="Clothes">Clothes</option>
+              <option value="Phones & Computers">Phones & Computers</option>
+            </select>
+          </td>
+        </tr>
 
-      <div class="form-row">
-        <label for="">Price :</label>
-        <input type="number" class="form-input" id="product-price">
-      </div>
+        <tr>
+          <td>
+            <label for="">Product Brand :</label>
+          </td>
+          <td>
+            <input type="text" class="form-input" id="product-brand">
+          </td>
+        </tr>
 
-      <div class="form-row">
-        <label for="">Description :</label>
-        <textarea id="product-description" class="form-input" rows="5"></textarea>
-      </div>
+        <tr>
+          <td>
+            <label for="">Price :</label>
+          </td>
+          <td>
+            <input type="number" class="form-input" id="product-price">
+          </td>
+        </tr>
+
+        <tr>
+          <td>            
+            <label for="">Description :</label>
+          </td>
+          <td>
+              <textarea id="product-description" class="form-input" rows="5"></textarea>
+          </td>
+        </tr>
+      </table>
 
       <div class="btn-container">
         <button type="submit" id="">Submit</button>
