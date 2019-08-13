@@ -19,6 +19,7 @@ const browseBtn = document.querySelector('#browse-btn');
 const fileInfo = document.querySelector('#file-info');
 const realImageInput = document.querySelector('#real-image-input');
 const productImagePreview = document.querySelector('#product-image-preview');
+const formResetBtn = document.querySelector('#form-reset');
 
 let ImageUrl = '';
 let image = {};
@@ -103,5 +104,8 @@ function uploadImage(){
         uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
           console.log('File available at', downloadURL);
         });
+
+        alert('Product Uploaded');
+        formResetBtn.click();
       });
 }
