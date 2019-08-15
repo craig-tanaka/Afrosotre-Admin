@@ -67,7 +67,8 @@ function uploadDocument(){
         Price: productPriceInput.value,
         Brand: productBrandInput.value,
         Category: productCategoryInput.value,
-        Description: productDescriptionInput.value
+        Description: productDescriptionInput.value,
+        UploadTimestamp: firebase.firestore.Timestamp.now().seconds
     })
     .then(function (docRef) {
         console.log("Document written with ID: ", docRef.id);

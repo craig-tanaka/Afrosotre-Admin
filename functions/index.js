@@ -14,10 +14,20 @@ admin.initializeApp();
 exports.copyToNew = functions.firestore
     .document(`products/{productId}`)
     .onCreate((snap) =>{
-        const newDocument = snap.data();
-
-        console.log(newDocument);
-
         return admin.firestore().doc(`/new/${snap.id}`)
-                .set(newDocument);
+                .set(snap.data());
+    });
+
+exports.updateNewReference = functions.firestore
+    .document(`products/{productID}`)
+    .onUpdate((change, context)=>{
+        return admin.firestore().doc(`/new/${change.after.id}`)
+                .set(change.after.data());
+    });
+
+    exports.deleteNewReference = functions.firestore
+    .document(`products/{productID}`)
+    .onDelete((change, context)=>{
+        return admin.firestore().doc(`/new/${change.id}`)
+                .delete();
     });
