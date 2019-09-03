@@ -1,0 +1,27 @@
+{
+  "name": "afrostore-admin",
+  "version": "1.0.0",
+  "description": "The official admin app for the afrostore webapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanxyRogue/Afrosotre-Admin.git"
+  },
+  "keywords": [
+    "Afrostore",
+    "Admin"
+  ],
+  "author": "Craig Tanaka Mudzingwa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TanxyRogue/Afrosotre-Admin/issues"
+  },
+  "homepage": "https://github.com/TanxyRogue/Afrosotre-Admin#readme",
+  "dependencies": {
+    "imagemin-mozjpeg": "^8.0.0",
+    "sharp": "^0.23.0"
+  }
+}
