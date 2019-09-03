@@ -37,7 +37,16 @@ exports.deleteNewReference = functions.firestore
         return admin.firestore().doc(`/new/${change.id}`)
             .delete();
     });
-    
+
+exports.deleteProductImages = functions.firestore
+    .document(`products/{productID}`)
+    .onDelete((change, context) => {
+        const {productID} = context.params;
+        return admin.storage().bucket().deleteFiles({
+            prefix: `product-images/${productID}`
+        })
+    })
+
 exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object) => {
 
     if(object.metadata === undefined) return console.log('image already converted');
