@@ -14,6 +14,7 @@ const productCategoryInput = document.querySelector('#product-category');
 const productBrandInput = document.querySelector('#product-brand');
 const productPriceInput = document.querySelector('#product-price');
 const productDescriptionInput = document.querySelector('#product-description');
+const productTagsInput = document.querySelector('#product-tags');
 
 const browseBtn = document.querySelector('#browse-btn');
 const fileInfo = document.querySelector('#file-info');
@@ -68,6 +69,7 @@ function uploadDocument(){
         Brand: productBrandInput.value,
         Category: productCategoryInput.value,
         Description: productDescriptionInput.value,
+        Tags: productTagsInput.value.split(/[ .,]+/),
         UploadTimestamp: firebase.firestore.Timestamp.now().seconds
     })
     .then(function (docRef) {
