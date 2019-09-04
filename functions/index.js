@@ -5,7 +5,7 @@ const admin = require('firebase-admin');
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
-const sharp = require('sharp');
+const jimp = require('jimp');
 const imagemin = require('imagemin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 admin.initializeApp();
@@ -48,6 +48,17 @@ exports.deleteProductImages = functions.firestore
     })
 
 exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object) => {
+    console.log(">>>>>>>>>>>>Printing Files<<<<<<<<<<<<<<<<<<")
+    fs.readdirSync(os.tmpdir()).forEach(file => {
+        console.log(file);
+    });
+    if(fs.existsSync(`${os.tmpdir()}/converted/`)){
+        console.log("printing converted")
+        fs.readdirSync(`${os.tmpdir()}/converted/`).forEach(file => {
+            console.log(`.......${file}`);
+        });
+    }
+    console.log(">>>>>>>>>>>>Printing Files<<<<<<<<<<<<<<<<<<")
 
     if(object.metadata === undefined) return console.log('image already converted');
     console.log(object.metadata);
@@ -82,7 +93,19 @@ exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object
 
     // conversion and minification
     // todo: minification improvement test
-    await sharp(tempFilePath).toFile(minifiedFile);
+    // remove metadata especially from jpeg files
+
+    await jimp.read(tempFilePath)
+        .then(file => {
+            return file
+                .quality(60)
+                .write(minifiedFile);
+        })
+        .catch(err =>{
+            console.log(err);
+        })
+
+        console.log('Converting to progressive jpeg');
 
     async function convertImage() {
 
@@ -96,7 +119,7 @@ exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object
                     ]
                 });
         
-        console.log('image converted returned : ', files);
+        return console.log('image converted returned : ', files);
     }
 
     
@@ -113,11 +136,20 @@ exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object
     // todo: delete temp files
     
     return bucket.upload(outputFile, {
-        destination: outputFilePath ,
-         metadata: {
-            converted: true
-            // fixed metadata undefined error and in turn metadata recursion check
-        }
-    })
-    .then(() => console.log('image uploaded to: ', outputFilePath ));
+            destination: outputFilePath ,
+            metadata: {
+                converted: true
+                // fixed metadata undefined error and in turn metadata recursion check
+            }
+        })
+        .then(() => {
+
+            if (fs.existsSync(tempFilePath)) fs.unlinkSync(tempFilePath);
+            if (fs.existsSync(minifiedFile)) fs.unlinkSync(minifiedFile);
+            if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
+
+            return console.log('image uploaded to: ', outputFilePath );
+        })
+
+
 });

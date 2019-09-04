@@ -94,7 +94,7 @@ function uploadImage(){
         // Observe state change events such as progress, pause, and resume
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        logProgress(`Image Upload is ${progress}% done...`);
+        logProgress(`Image Upload is ${progress.toPrecision(3)}% done...`);
 
         if(snapshot.state === firebase.storage.TaskState.PAUSED)
             logProgress('Image Uploaded Paused');
@@ -110,6 +110,7 @@ function uploadImage(){
             document.querySelector('main').style.display = 'flex';
             document.querySelector('.loader-container').style.display = 'none';
             formResetBtn.click();
+            realImageInput.value = '';
             productImagePreview.style.backgroundImage = '';
             productImagePreview.style.backgroundColor = 'white';
         }, 1000)
