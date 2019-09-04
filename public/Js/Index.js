@@ -53,13 +53,17 @@ form.onsubmit = event => {
     event.preventDefault();
 
     // validateForm();
+    logProgress(`Uploading Product Details .....`);
+    document.querySelector('main').style.display = 'none';
+    document.querySelector('.loader-container').style.display = 'initial';
+
     uploadDocument();
 
     return false;
 }
 
 function validateForm() {
-
+//  implement form validation logic
 }
 
 function uploadDocument(){
@@ -69,19 +73,20 @@ function uploadDocument(){
         Brand: productBrandInput.value,
         Category: productCategoryInput.value,
         Description: productDescriptionInput.value,
-        Tags: productTagsInput.value.split(/[ .,]+/),
+        Tags: productTagsInput.value.toLowerCase().split(/[ .,]+/),
         UploadTimestamp: firebase.firestore.Timestamp.now().seconds
     })
     .then(function (docRef) {
-        console.log("Document written with ID: ", docRef.id);
+        logProgress(`Product details upload finished.`);
         DocRef = docRef;
+        logProgress(`Begining Image Upload.`);
         uploadImage();
     })
     .catch(function (error) {
+        logProgress(`Product details upload failed. Please try again in a few minutes or contact developer`);
         console.error("Error adding document: ", error);
     });
 }
-
 function uploadImage(){
     let uploadTask = storageRef.child('product-images/' + DocRef.id + '/00.' + fileExt).put(image);
 
@@ -89,26 +94,28 @@ function uploadImage(){
         // Observe state change events such as progress, pause, and resume
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log('Upload is paused');
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            console.log('Upload is running');
-            break;
-        }
+        logProgress(`Image Upload is ${progress}% done...`);
+
+        if(snapshot.state === firebase.storage.TaskState.PAUSED)
+            logProgress('Image Uploaded Paused');
       }, function(error) {
-        // Handle unsuccessful uploads
-        console.log('upload unsuccessful');
+          logProgress('upload unsuccessful. Please try again in a few minutes or contact developer;');
+          // Handle unsuccessful uploads
       }, function() {
         // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-          console.log('File available at', downloadURL);
-        });
-
-        alert('Product Uploaded');
-        formResetBtn.click();
+        logProgress('Image upload successful');
+        
+        
+        setTimeout(()=>{
+            document.querySelector('main').style.display = 'flex';
+            document.querySelector('.loader-container').style.display = 'none';
+            formResetBtn.click();
+            productImagePreview.style.backgroundImage = '';
+            productImagePreview.style.backgroundColor = 'white';
+        }, 1000)
       });
+}
+
+function logProgress (message) {
+    document.querySelector('.loader-text').innerHTML = message;
 }
