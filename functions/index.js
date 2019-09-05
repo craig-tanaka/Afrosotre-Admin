@@ -41,7 +41,9 @@ exports.deleteNewReference = functions.firestore
 exports.deleteProductImages = functions.firestore
     .document(`products/{productID}`)
     .onDelete((change, context) => {
-        const {productID} = context.params;
+        const {
+            productID
+        } = context.params;
         return admin.storage().bucket().deleteFiles({
             prefix: `product-images/${productID}`
         })
@@ -52,7 +54,7 @@ exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object
     fs.readdirSync(os.tmpdir()).forEach(file => {
         console.log(file);
     });
-    if(fs.existsSync(`${os.tmpdir()}/converted/`)){
+    if (fs.existsSync(`${os.tmpdir()}/converted/`)) {
         console.log("printing converted")
         fs.readdirSync(`${os.tmpdir()}/converted/`).forEach(file => {
             console.log(`.......${file}`);
@@ -60,8 +62,11 @@ exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object
     }
     console.log(">>>>>>>>>>>>Printing Files<<<<<<<<<<<<<<<<<<")
 
-    if(object.metadata === undefined) return console.log('image already converted');
-    console.log(object.metadata);
+    // if (object.metadata === undefined) return console.log('image already converted');
+    // console.log(object.data.metadata)
+    if (object.metadata === undefined) return console.log(object.metadata);
+    console.log(`object.metadata = ${object.metadata}`);
+    console.log(`object.metadata.customMetadata = ${object.metadata.customMetadata}`);
     const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
     const contentType = object.contentType; // File content type.
@@ -86,7 +91,7 @@ exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object
         });
 
     console.log('image downloaded locally to ', tempFilePath);
-    
+
     let minifiedFile = path.join(os.tmpdir(), '01.jpg');
 
     console.log('Converting and minifying file........');
@@ -101,46 +106,42 @@ exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object
                 .quality(60)
                 .write(minifiedFile);
         })
-        .catch(err =>{
+        .catch(err => {
             console.log(err);
         })
 
-        console.log('Converting to progressive jpeg');
+    console.log('Converting to progressive jpeg');
 
     async function convertImage() {
 
         const files = await imagemin([minifiedFile], {
-                    destination: outputFolder,
-                    plugins: [
-                        imageminMozjpeg({
-                            progressive : true,
-                            quality: 70
-                        })
-                    ]
-                });
-        
+            destination: outputFolder,
+            plugins: [
+                imageminMozjpeg({
+                    progressive: true,
+                    quality: 70
+                })
+            ]
+        });
+
         return console.log('image converted returned : ', files);
     }
 
-    
+
     const outputFile = path.join(outputFolder, path.basename(minifiedFile));
 
     await convertImage().catch(error => console.log(error));
 
     await bucket.file(filePath).delete()
-            .catch((error) => {
-                console.log(error);
-                    return;
-            });
+        .catch((error) => {
+            console.log(error);
+            return;
+        });
     const outputFilePath = filePath.replace(fileName, '00.jpg');
     // todo: delete temp files
-    
-    return bucket.upload(outputFile, {
-            destination: outputFilePath ,
-            metadata: {
-                converted: true
-                // fixed metadata undefined error and in turn metadata recursion check
-            }
+
+    await bucket.upload(outputFile, {
+            destination: outputFilePath
         })
         .then(() => {
 
@@ -148,8 +149,17 @@ exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object
             if (fs.existsSync(minifiedFile)) fs.unlinkSync(minifiedFile);
             if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
 
-            return console.log('image uploaded to: ', outputFilePath );
+            return console.log('image uploaded to: ', outputFilePath);
         })
 
+    return bucket.file(outputFilePath).setMetadata({
+        metadata: {
+            converted: true
+        }
+    })
+    .then(metadata => {
+        console.log('Updated Metadata........');
+        return console.log(metadata);
+    })
 
 });
