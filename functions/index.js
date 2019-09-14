@@ -41,13 +41,11 @@ exports.deleteNewReference = functions.firestore
 exports.deleteProductImages = functions.firestore
     .document(`products/{productID}`)
     .onDelete((change, context) => {
-        const {
-            productID
-        } = context.params;
+        const { productID } = context.params;
         return admin.storage().bucket().deleteFiles({
             prefix: `product-images/${productID}`
-        })
-    })
+        });
+    });
 
 exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object) => {
     console.log(">>>>>>>>>>>>Printing Files<<<<<<<<<<<<<<<<<<")
@@ -163,3 +161,17 @@ exports.convertImageToJpeg = functions.storage.object().onFinalize(async (object
     })
 
 });
+
+exports.onUserDelete = functions.auth.user().onDelete((user) => {
+    // TODO send user bye email
+    console.log(`Deleting user ${user.displayName}`);
+    return admin.firestore().doc(`/carts/${user.email}`).delete();
+});
+
+exports.onUserSignUp = functions.auth.user().onCreate((user) => {
+    //  TODO send user greeting email
+    console.log(`Creating user, ${user.displayName} cart`);
+    return admin.firestore().doc(`/carts/${user.uid}`).set({
+        Products: []
+    });
+  });
